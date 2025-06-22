@@ -1,31 +1,409 @@
-.App {
-  text-align: center;
+body {
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    font-family: 'Kanit', 'Prompt', 'Segoe UI', sans-serif;
+    background: linear-gradient(120deg, #0f2027 0%, #2c5364 40%, #1a2980 70%, #26d0ce 100%);
+    background-size: cover;
+    animation: spaceWave 16s ease-in-out infinite;
+    overflow-x: hidden;
+    position: relative;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-.App-header {
-  background-color: #282c34;
+/* ปรับขนาดการ์ดและพื้นหลังให้เชื่อมกัน */
+.profile-bg {
   min-height: 100vh;
+  width: 100vw;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  background: none; /* ลบพื้นหลังซ้อน */
+  position: relative;
+  z-index: 1;
 }
 
-.App-link {
-  color: #61dafb;
+.profile-card {
+  background: rgba(40, 20, 60, 0.92);
+  border-radius: 40px;
+  padding: 56px 72px 48px 72px;
+  box-shadow: 0 16px 64px #c800ff44, 0 6px 24px #1e3c72cc;
+  text-align: center;
+  width: 840px; /* กว้างขึ้น 2 เท่า */
+  max-width: 96vw;
+  position: relative;
+  z-index: 2;
+  border: 4px solid #c800ff66;
+  overflow: hidden;
+  transition: 
+    width 0.3s, 
+    padding 0.3s, 
+    transform 0.18s cubic-bezier(.25,.46,.45,.94), 
+    box-shadow 0.18s cubic-bezier(.25,.46,.45,.94);
+  will-change: transform;
+  /* เพิ่ม pointer-events เพื่อให้แน่ใจว่า mousemove ทำงาน */
+  pointer-events: auto;
 }
 
-.heart {
-  color: #ff0000;
+/* อวาตาร์หลัก */
+.profile-avatar {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  margin-bottom: 18px;
+  border: 4px solid #fff;
+  box-shadow: 0 0 24px #c800ff88, 0 2px 8px #fff4;
+  background: #222;
+  object-fit: cover;
 }
 
-.small {
-  font-size: 0.75rem;
+/* ชื่อโปรไฟล์ */
+.profile-name {
+  color: #c800ff;
+  font-size: 2.7rem;
+  margin: 0 0 10px 0;
+  font-weight: bold;
+  text-shadow: 0 0 16px #c800ffcc, 0 2px 8px #fff2;
+  letter-spacing: 2px;
+  position: relative;
+}
+
+/* สถานะ */
+.profile-status {
+  color: #ff4fff;
+  margin-bottom: 28px;
+  font-size: 1.15rem;
+  opacity: 0.85;
+  text-shadow: 0 0 8px #ff4fff88;
+  font-style: italic;
+}
+
+/* กล่องข้อมูลย่อย */
+.profile-info {
+  background: rgba(60, 30, 80, 0.85);
+  border-radius: 18px;
+  padding: 14px 18px;
+  margin-bottom: 28px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  justify-content: center;
+  box-shadow: 0 2px 12px #c800ff22;
+}
+
+.profile-mini-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  object-fit: cover;
+}
+
+.profile-username {
+  color: #fff;
+  font-weight: bold;
+  font-size: 1.1rem;
+  letter-spacing: 1px;
+}
+
+.profile-verified {
+  color: #00ffae;
+  font-size: 1.2rem;
+  margin-left: 4px;
+}
+
+.profile-lastseen {
+  color: #aaa;
+  font-size: 0.98rem;
+  margin-left: 8px;
+  font-style: italic;
+}
+
+/* Social icons */
+.profile-socials {
+  margin: 30px 0 18px 0;
+  display: flex;
+  justify-content: center;
+  gap: 32px;
+}
+
+.profile-socials img {
+  width: 36px;
+  height: 36px;
+  opacity: 0.85;
+  transition: opacity 0.2s, transform 0.2s, filter 0.2s;
+  filter: drop-shadow(0 0 8px #c800ff44);
+}
+
+.profile-socials img:hover {
+  opacity: 1;
+  transform: scale(1.12) rotate(-6deg);
+  filter: drop-shadow(0 0 16px #ff4fff88);
+}
+
+/* Viewers */
+.profile-viewers {
+  color: #c8aaff;
+  font-size: 1.08rem;
+  position: absolute;
+  left: 24px;
+  bottom: 18px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  opacity: 0.85;
+  background: rgba(60, 30, 80, 0.65);
+  padding: 4px 14px 4px 10px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px #c800ff22;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .profile-card {
+    width: 98vw;
+    padding: 24px 4vw 24px 4vw;
+  }
+  .profile-socials {
+    gap: 18px;
+  }
+  .profile-avatar {
+    width: 80px;
+    height: 80px;
+  }
+  .profile-mini-avatar {
+    width: 28px;
+    height: 28px;
+  }
+}
+
+@media (max-width: 1000px) {
+  .profile-card {
+    width: 98vw;
+    padding: 32px 2vw 32px 2vw;
+  }
+}
+
+/* ลบ margin และเงา global img ที่อาจรบกวน */
+img:not(.profile-avatar):not(.profile-mini-avatar):not(.profile-socials img) {
+  margin: 0;
+  border: none;
+  box-shadow: none;
+}
+
+/* พื้นหลังอวกาศคลื่นไหลลื่น */
+body {
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  font-family: 'Kanit', 'Prompt', 'Segoe UI', sans-serif;
+  background: linear-gradient(120deg, #0f2027, #2c5364, #1a2980, #26d0ce, #1e3c72, #2a5298);
+  background-size: 400% 400%;
+  animation: spaceWave 16s ease-in-out infinite;
+  overflow-x: hidden;
+  position: relative;
+}
+
+@keyframes spaceWave {
+  0% {background-position: 0% 50%;}
+  50% {background-position: 100% 50%;}
+  100% {background-position: 0% 50%;}
+}
+
+/* เพิ่มจุดดาว */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  z-index: 0;
+  background: 
+    radial-gradient(white 1px, transparent 1px) 0 0/40px 40px,
+    radial-gradient(white 1px, transparent 1px) 20px 20px/40px 40px;
+  opacity: 0.10;
+  animation: starsMove 60s linear infinite;
+}
+
+@keyframes starsMove {
+  0% {background-position: 0 0, 20px 20px;}
+  100% {background-position: 100px 100px, 120px 120px;}
+}
+
+/* กล่องโปรไฟล์ */
+.profile-bg {
+  min-height: 100vh;
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none; /* ลบพื้นหลังซ้อน */
+  position: relative;
+  z-index: 1;
+}
+
+.profile-card {
+  background: rgba(40, 20, 60, 0.92);
+  border-radius: 40px;
+  padding: 56px 72px 48px 72px;
+  box-shadow: 0 16px 64px #c800ff44, 0 6px 24px #1e3c72cc;
+  text-align: center;
+  width: 840px; /* กว้างขึ้น 2 เท่า */
+  max-width: 96vw;
+  position: relative;
+  z-index: 2;
+  border: 4px solid #c800ff66;
+  overflow: hidden;
+  transition: 
+    width 0.3s, 
+    padding 0.3s, 
+    transform 0.18s cubic-bezier(.25,.46,.45,.94), 
+    box-shadow 0.18s cubic-bezier(.25,.46,.45,.94);
+  will-change: transform;
+  /* เพิ่ม pointer-events เพื่อให้แน่ใจว่า mousemove ทำงาน */
+  pointer-events: auto;
+}
+
+/* อวาตาร์หลัก */
+.profile-avatar {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  margin-bottom: 18px;
+  border: 4px solid #fff;
+  box-shadow: 0 0 24px #c800ff88, 0 2px 8px #fff4;
+  background: #222;
+  object-fit: cover;
+}
+
+/* ชื่อโปรไฟล์ */
+.profile-name {
+  color: #c800ff;
+  font-size: 2.7rem;
+  margin: 0 0 10px 0;
+  font-weight: bold;
+  text-shadow: 0 0 16px #c800ffcc, 0 2px 8px #fff2;
+  letter-spacing: 2px;
+  position: relative;
+}
+
+/* สถานะ */
+.profile-status {
+  color: #ff4fff;
+  margin-bottom: 28px;
+  font-size: 1.15rem;
+  opacity: 0.85;
+  text-shadow: 0 0 8px #ff4fff88;
+  font-style: italic;
+}
+
+/* กล่องข้อมูลย่อย */
+.profile-info {
+  background: rgba(60, 30, 80, 0.85);
+  border-radius: 18px;
+  padding: 14px 18px;
+  margin-bottom: 28px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  justify-content: center;
+  box-shadow: 0 2px 12px #c800ff22;
+}
+
+.profile-mini-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  object-fit: cover;
+}
+
+.profile-username {
+  color: #fff;
+  font-weight: bold;
+  font-size: 1.1rem;
+  letter-spacing: 1px;
+}
+
+.profile-verified {
+  color: #00ffae;
+  font-size: 1.2rem;
+  margin-left: 4px;
+}
+
+.profile-lastseen {
+  color: #aaa;
+  font-size: 0.98rem;
+  margin-left: 8px;
+  font-style: italic;
+}
+
+/* Social icons */
+.profile-socials {
+  margin: 30px 0 18px 0;
+  display: flex;
+  justify-content: center;
+  gap: 32px;
+}
+
+.profile-socials img {
+  width: 36px;
+  height: 36px;
+  opacity: 0.85;
+  transition: opacity 0.2s, transform 0.2s, filter 0.2s;
+  filter: drop-shadow(0 0 8px #c800ff44);
+}
+
+.profile-socials img:hover {
+  opacity: 1;
+  transform: scale(1.12) rotate(-6deg);
+  filter: drop-shadow(0 0 16px #ff4fff88);
+}
+
+/* Viewers */
+.profile-viewers {
+  color: #c8aaff;
+  font-size: 1.08rem;
+  position: absolute;
+  left: 24px;
+  bottom: 18px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  opacity: 0.85;
+  background: rgba(60, 30, 80, 0.65);
+  padding: 4px 14px 4px 10px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px #c800ff22;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .profile-card {
+    width: 98vw;
+    padding: 24px 4vw 24px 4vw;
+  }
+  .profile-socials {
+    gap: 18px;
+  }
+  .profile-avatar {
+    width: 80px;
+    height: 80px;
+  }
+  .profile-mini-avatar {
+    width: 28px;
+    height: 28px;
+  }
+}
+
+@media (max-width: 1000px) {
+  .profile-card {
+    width: 98vw;
+    padding: 32px 2vw 32px 2vw;
+  }
+}
+
+/* ลบ margin และเงา global img ที่อาจรบกวน */
+img:not(.profile-avatar):not(.profile-mini-avatar):not(.profile-socials img) {
+  margin: 0;
+  border: none;
+  box-shadow: none;
 }
